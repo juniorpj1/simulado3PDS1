@@ -40,6 +40,7 @@ public class Questao1Servlet extends HttpServlet {
 			try {
 				Pedido pedido = pedidoService.buscar(cod);
 				request.setAttribute("pedido", pedido);
+				request.setAttribute("detalhados", pedido.getItens());
 				forward = DETALHE_PEDIDOS;
 			} catch (RuntimeException e) {
 				request.setAttribute("erro", "Erro de execução: " + e.getMessage());

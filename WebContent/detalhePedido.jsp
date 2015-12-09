@@ -1,57 +1,63 @@
-<%@page import="dominio.Pedido"%>
-<%@page import="dominio.ItemPedido"%>
-<%@page import="java.util.List"%>
-<%@page import="java.math.BigDecimal"%>
-<%@page import="java.util.*"%>
+<%@ page import="dominio.Pedido"%>
+<%@ page import="dominio.ItemPedido"%>
+<%@ page import="java.util.*"%>
+
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Detalhes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Detalhes do Pedido</title>
 </head>
 
 <body>
-	<h2>Detalhes do Pedido</h2>
+	<h2>Pedido Detalhado</h2>
+	<br />
 	<%
-		List<Integer> aux = new ArrayList<>();
-		List<String> aux2 = new ArrayList<>();
-		List<BigDecimal> aux3 = new ArrayList<>();
 		Pedido x = (Pedido) request.getAttribute("pedido");
-
-		for (int i = 0; i < x.getItens().size(); i++) {
-			aux.add(x.getItens().get(i).getQuantidade());
-		}
-
-		for (int i = 0; i < x.getItens().size(); i++) {
-			aux2.add(x.getItens().get(i).getProduto().getNome());
-		}
-
-		for (int i = 0; i < x.getItens().size(); i++) {
-			aux3.add(x.getItens().get(i).getProduto().getPreco());
-		}
+		List<ItemPedido> itens = (List<ItemPedido>) request.getAttribute("detalhados");
 	%>
+
 	<table border="1">
 		<tr>
-			<td>Código</td>
-			<td>Data</td>
-			<td>Preço Total</td>
-			<td>Quantidade</td>
-			<td>Nome do Produto</td>
-			<td>Subtotal</td>
+			<th>Código</th>
+			<th>Data</th>
+			<th>Preço Total</th>
 		</tr>
 
 		<tr>
 			<td><%=x.getCodPedido()%></td>
 			<td><%=x.getData()%></td>
 			<td><%=x.precoTotal()%></td>
-			<td><%=aux.toString()%></td>
-			<td><%=aux2.toString()%></td>
-			<td><%=aux3.toString()%></td>
 		</tr>
 
+	</table>
+	<br />
+	<h3>Itens do Pedido</h3>
+	<table border=1>
+		<thead>
+			<tr>
+				<th>Quantidade</th>
+				<th>Subtotal</th>
+				<th>Nome do produto</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${detalhados}" var="x">
+				<tr>
+
+					<td>${x.getQuantidade()}</td>
+					<td>${x.subTotal()}</td>
+					<td>${x.getProduto().getNome()}</td>
+
+				</tr>
+			</c:forEach>
+		</tbody>
 	</table>
 </body>
 </html>
